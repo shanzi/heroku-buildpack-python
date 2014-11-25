@@ -172,21 +172,8 @@ source $BIN_DIR/steps/pip-install
 sub-env $BIN_DIR/steps/collectstatic
 
 ## install fontforge
-function error() {
-  echo " !     $*" >&2
-  exit 1
-}
-
 function topic() {
   echo "-----> $*"
-}
-
-function indent() {
-  c='s/^/       /'
-  case $(uname) in
-    Darwin) sed -l "$c";;
-    *)      sed -u "$c";;
-  esac
 }
 
 APT_CACHE_DIR="$CACHE_DIR/apt/cache"
@@ -208,6 +195,10 @@ for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
   dpkg -x $DEB $BUILD_DIR/.apt/
 done
 
+ln $BUILD_DIR/.apt/usr/lib/libfontforge.so.1 $BUILD_DIR/.apt/usr/lib/libfontforge.so
+ln $BUILD_DIR/.apt/usr/lib/libgunicode.so.3 $BUILD_DIR/.apt/usr/lib/libgunicode.so
+ln $BUILD_DIR/.apt/usr/lib/libgutils.so.1 $BUILD_DIR/.apt/usr/lib/libgutils.so
+
 
 # ### Finalize
 #
@@ -217,10 +208,10 @@ set-env PATH '$HOME/.heroku/python/bin:$PATH'
 set-env PYTHONUNBUFFERED true
 set-env PYTHONHOME /app/.heroku/python
 set-env LIBRARY_PATH /app/.heroku/vendor/lib:/app/.heroku/python/lib
-set-env LD_LIBRARY_PATH '/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH'
+set-env LD_LIBRARY_PATH '/app/.apt/usr/lib:/app/.apt/usr/lib/x86_64-linux-gnu:/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH'
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
-set-default-env PYTHONPATH /app/
+set-default-env PYTHONPATH '/app/:/app/.apt/usr/lib/python2.7/:/app/.apt/usr/lib/python2.7/dist-packages/'
 
 
 # Experimental post_compile hook.
