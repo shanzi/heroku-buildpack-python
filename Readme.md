@@ -1,7 +1,9 @@
 Heroku buildpack: Python
 ========================
 
-This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](http://www.pip-installer.org/).
+This is a fork of offcial [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](http://www.pip-installer.org/).
+This build pack installs [python-fontforge](http://fontforge.github.io) and make it accessible in your python 
+enviroment.
 
 
 Usage
